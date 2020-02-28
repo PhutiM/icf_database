@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import {
   Button,
   Card,
@@ -16,6 +15,53 @@ import {
 } from "reactstrap";
 
 class Login extends Component {
+  constructor() {
+    super();
+    this.state = {
+      username: "",
+      password: ""
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.OnButtonPress = this.OnButtonPress.bind(this);
+  }
+
+  handleChange({ target }) {
+    this.setState({
+      [target.name]: target.value
+    });
+  }
+
+  OnButtonPress() {
+    const { username, password } = this.state;
+    fetch("http://localhost:8000/authenticate.php", {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/json" // <-- Specifying the Content-Type
+      }),
+      body: JSON.stringify({
+        username: username,
+        password: password
+      }) // <-- Post parameters
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(responseJson);
+        if (responseJson == "Wrong Details") {
+          this.setState({ error: "", loading: false });
+          alert("Your username or password is incorrect.");
+        } else if (responseJson == "Ooops, something went wrong") {
+          alert("Ooops, something went wrong");
+        } else {
+          this.setState({ error: "", loading: false });
+          window.location.href = "#/dashboard";
+        }
+      })
+      .catch(error => {
+        alert(error);
+      });
+  }
+
   render() {
     return (
       <div className="app flex-row align-items-center">
@@ -34,10 +80,14 @@ class Login extends Component {
                             <i className="icon-user"></i>
                           </InputGroupText>
                         </InputGroupAddon>
+
                         <Input
                           type="text"
                           placeholder="Username"
                           autoComplete="username"
+                          value={this.state.username}
+                          onChange={this.handleChange}
+                          name="username"
                         />
                       </InputGroup>
                       <InputGroup className="mb-4">
@@ -50,29 +100,24 @@ class Login extends Component {
                           type="password"
                           placeholder="Password"
                           autoComplete="current-password"
+                          value={this.state.password}
+                          onChange={this.handleChange}
+                          name="password"
                         />
                       </InputGroup>
+
                       <Row>
-                        <Col xs="6">
-                          <Button color="primary" className="px-4">
+                        <Col xs="12">
+                          <Button
+                            color="primary"
+                            className="px-12"
+                            onClick={this.OnButtonPress}
+                          >
                             Login
-                          </Button>
-                        </Col>
-                        <Col xs="6" className="text-right">
-                          <Button color="link" className="px-0">
-                            Forgot password?
                           </Button>
                         </Col>
                       </Row>
                     </Form>
-                  </CardBody>
-                </Card>
-                <Card
-                  className="text-white bg-primary py-5 d-md-down-none"
-                  style={{ width: "44%" }}
-                >
-                  <CardBody className="text-center">
-                    <div></div>
                   </CardBody>
                 </Card>
               </CardGroup>

@@ -35,8 +35,10 @@ class Tables extends Component {
     this.state = {
       items: [],
       totalSize: 0,
+      total_count: 10,
       page: 1,
-      sizePerPage: 10
+      sizePerPage: 10,
+      data: []
     };
     this.fetchData = this.fetchData.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
@@ -45,13 +47,32 @@ class Tables extends Component {
 
   componentDidMount() {
     this.fetchData();
+    this.Data();
+  }
+
+  Data() {
+    fetch("http://localhost:8000/partners.php", {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/json" // <-- Specifying the Content-Type
+      }),
+      body: JSON.stringify({}) // <-- Post parameters
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        //Here
+        this.setState({ data: responseJson.data });
+      })
+      .catch(error => {
+        alert(error);
+      });
   }
 
   fetchData(page = this.state.page, sizePerPage = this.state.sizePerPage) {
     fakeDataFetcher.fetch(page, sizePerPage).then(data => {
       // this.GetCampaigns(page, sizePerPage);
       this.setState({
-        items: this.state.campaigns,
+        items: this.state.data,
         totalSize: this.state.total_count,
         page,
         sizePerPage
@@ -98,12 +119,8 @@ class Tables extends Component {
       { dataField: "name", name: "Name", isKey: false },
       { dataField: "surname", name: "Surname", isKey: false },
       { dataField: "mobile", name: "Mobile", isKey: false },
-      {
-        dataField: "max_reward_value",
-        name: "Max Airtime value",
-        isKey: false
-      },
       { dataField: "address", name: "Address", isKey: false },
+      { dataField: "dob", name: "Date of Birth", isKey: false },
       { dataField: "gender", name: "Gender", isKey: false }
     ];
 
@@ -111,7 +128,7 @@ class Tables extends Component {
       <Card>
         <CardBody>
           <PaginationTable
-            data={this.state.campaigns}
+            data={this.state.data}
             options={options}
             total_count={this.state.total_count}
             tableHeaders={tableHeaders}

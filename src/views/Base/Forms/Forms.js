@@ -34,8 +34,18 @@ class Forms extends Component {
     this.state = {
       collapse: true,
       fadeIn: true,
-      timeout: 300
+      timeout: 300,
+      name: "",
+      surname: "",
+      address: "",
+      mobile: "",
+      email: "",
+      dob: "",
+      marital_status: "",
+      gender: ""
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.OnButtonPress = this.OnButtonPress.bind(this);
   }
 
   toggle() {
@@ -46,6 +56,49 @@ class Forms extends Component {
     this.setState(prevState => {
       return { fadeIn: !prevState };
     });
+  }
+
+  handleChange({ target }) {
+    this.setState({
+      [target.name]: target.value
+    });
+  }
+
+  OnButtonPress() {
+    const {
+      name,
+      surname,
+      dob,
+      address,
+      mobile,
+      marital_status,
+      email,
+      gender
+    } = this.state;
+    fetch("http://localhost:8000/insert_partner.php", {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/json" // <-- Specifying the Content-Type
+      }),
+      body: JSON.stringify({
+        name: name,
+        surname: surname,
+        dob: dob,
+        address: address,
+        mobile: mobile,
+        marital_status: marital_status,
+        email: email,
+        gender: gender
+      }) // <-- Post parameters
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        //Here
+        this.setState({ data: responseJson.data });
+      })
+      .catch(error => {
+        alert(error);
+      });
   }
 
   render() {
@@ -66,8 +119,44 @@ class Forms extends Component {
                       <Input
                         type="text"
                         id="name"
+                        name="name"
                         placeholder="Enter your name"
                         required
+                        value={this.state.name}
+                        onChange={this.handleChange}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs="8">
+                    <FormGroup>
+                      <Label htmlFor="name">Surname</Label>
+                      <Input
+                        type="text"
+                        id="surname"
+                        name="surname"
+                        placeholder="Enter your name"
+                        required
+                        value={this.state.surname}
+                        onChange={this.handleChange}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col xs="8">
+                    <FormGroup>
+                      <Label htmlFor="name">Date of birth</Label>
+                      <Input
+                        type="text"
+                        id="dob"
+                        name="dob"
+                        placeholder="Enter your date of birth"
+                        required
+                        value={this.state.dob}
+                        onChange={this.handleChange}
                       />
                     </FormGroup>
                   </Col>
@@ -80,8 +169,11 @@ class Forms extends Component {
                       <Input
                         type="text"
                         id="address"
+                        name="address"
                         placeholder="Enter your address"
                         required
+                        value={this.state.address}
+                        onChange={this.handleChange}
                       />
                     </FormGroup>
                   </Col>
@@ -93,9 +185,12 @@ class Forms extends Component {
                       <Label htmlFor="name">Mobile Number</Label>
                       <Input
                         type="text"
+                        name="mobile"
                         id="mobile"
                         placeholder="Enter your mobile number"
                         required
+                        value={this.state.mobile}
+                        onChange={this.handleChange}
                       />
                     </FormGroup>
                   </Col>
@@ -106,9 +201,12 @@ class Forms extends Component {
                       <Label htmlFor="name">Email Address</Label>
                       <Input
                         type="email"
-                        id="mobile"
+                        id="email"
+                        name="email"
                         placeholder="Enter your email address"
                         required
+                        value={this.state.email}
+                        onChange={this.handleChange}
                       />
                     </FormGroup>
                   </Col>
@@ -118,11 +216,16 @@ class Forms extends Component {
                   <Col xs="8">
                     <FormGroup>
                       <Label htmlFor="name">Gender</Label>
-
-                      <Input type="select" name="gender" id="gender">
+                      <Input
+                        type="select"
+                        value={this.state.gender}
+                        onChange={this.handleChange}
+                        name="gender"
+                        id="gender"
+                      >
                         <option value="0">Please select</option>
-                        <option value="1">Male</option>
-                        <option value="2">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
                       </Input>
                     </FormGroup>
                   </Col>
@@ -132,32 +235,29 @@ class Forms extends Component {
                     <FormGroup>
                       <Label htmlFor="name">Marital Status</Label>
 
-                      <Input type="select" name="marital_status" id="gender">
-                        <option value="0">Please select</option>
-                        <option value="1">Married</option>
-                        <option value="2">Single</option>
-                        <option value="3">Divoced</option>
-                      </Input>
-                    </FormGroup>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col xs="8">
-                    <FormGroup>
-                      <Label htmlFor="name">Surname</Label>
                       <Input
-                        type="text"
-                        id="surname"
-                        placeholder="Enter your surname"
-                        required
-                      />
+                        type="select"
+                        name="marital_status"
+                        id="marital_status"
+                        value={this.state.marital_status}
+                        onChange={this.handleChange}
+                      >
+                        <option value="0">Please select</option>
+                        <option value="Married">Married</option>
+                        <option value="Single">Single</option>
+                        <option value="Divoced">Divoced</option>
+                      </Input>
                     </FormGroup>
                   </Col>
                 </Row>
               </CardBody>
               <CardFooter>
-                <Button type="submit" size="lrg" color="primary">
+                <Button
+                  type="submit"
+                  onClick={this.OnButtonPress}
+                  size="lrg"
+                  color="primary"
+                >
                   <i className="fa fa-dot-circle-o"></i> Submit
                 </Button>
               </CardFooter>
