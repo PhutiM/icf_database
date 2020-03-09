@@ -16,7 +16,7 @@ class DefaultFooter extends Component {
       <React.Fragment>
         <span>
           <a href="https://coreui.io">International Christian Fellowship</a>{" "}
-          &copy; 2019.
+          &copy; 2020.
         </span>
       </React.Fragment>
     );

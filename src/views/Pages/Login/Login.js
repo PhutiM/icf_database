@@ -34,7 +34,8 @@ class Login extends Component {
 
   OnButtonPress() {
     const { username, password } = this.state;
-    fetch("http://localhost:8000/authenticate.php", {
+    fetch("https://plushealthmedical.000webhostapp.com/authenticate.php", {
+      mode: "no-cors",
       method: "POST",
       headers: new Headers({
         "Content-Type": "application/json" // <-- Specifying the Content-Type

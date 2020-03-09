@@ -51,7 +51,7 @@ class Tables extends Component {
   }
 
   Data() {
-    fetch("http://localhost:8000/partners.php", {
+    fetch("https://plushealthmedical.000webhostapp.com/partners.php", {
       method: "POST",
       headers: new Headers({
         "Content-Type": "application/json" // <-- Specifying the Content-Type
@@ -121,7 +121,8 @@ class Tables extends Component {
       { dataField: "mobile", name: "Mobile", isKey: false },
       { dataField: "address", name: "Address", isKey: false },
       { dataField: "dob", name: "Date of Birth", isKey: false },
-      { dataField: "gender", name: "Gender", isKey: false }
+      { dataField: "gender", name: "Gender", isKey: false },
+      { dataField: "department", name: "department", isKey: false }
     ];
 
     return (

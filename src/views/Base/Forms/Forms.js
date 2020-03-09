@@ -73,9 +73,10 @@ class Forms extends Component {
       mobile,
       marital_status,
       email,
-      gender
+      gender,
+      department
     } = this.state;
-    fetch("http://localhost:8000/insert_partner.php", {
+    fetch("https://plushealthmedical.000webhostapp.com/insert_partner.php", {
       method: "POST",
       headers: new Headers({
         "Content-Type": "application/json" // <-- Specifying the Content-Type
@@ -88,13 +89,26 @@ class Forms extends Component {
         mobile: mobile,
         marital_status: marital_status,
         email: email,
-        gender: gender
+        gender: gender,
+        department: department
       }) // <-- Post parameters
     })
       .then(response => response.json())
       .then(responseJson => {
-        //Here
-        this.setState({ data: responseJson.data });
+        this.setState({
+          name: "",
+          surname: "",
+          dob: "",
+          address: "",
+          mobile: "",
+          marital_status: "",
+          email: "",
+          gender: "",
+          department: "",
+          data: responseJson.data
+        });
+
+        alert("Partner successfully addedd");
       })
       .catch(error => {
         alert(error);
@@ -211,6 +225,28 @@ class Forms extends Component {
                     </FormGroup>
                   </Col>
                 </Row>
+                <Row>
+                  <Col xs="8">
+                    <FormGroup>
+                      <Label htmlFor="name">Department</Label>
+                      <Input
+                        type="select"
+                        name="department"
+                        id="department"
+                        value={this.state.department}
+                        onChange={this.handleChange}
+                      >
+                        <option value="0">Please select</option>
+                        <option value="Youth">Youth</option>
+                        <option value="Young Adult">Young Adult</option>
+                        <option value="Sunday School">Sunday School</option>
+                        <option value="Mother">Mother</option>
+                        <option value="Father">Father</option>
+                        <option value="Over 50">Over 50</option>
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                </Row>
 
                 <Row>
                   <Col xs="8">
@@ -218,10 +254,10 @@ class Forms extends Component {
                       <Label htmlFor="name">Gender</Label>
                       <Input
                         type="select"
-                        value={this.state.gender}
-                        onChange={this.handleChange}
                         name="gender"
                         id="gender"
+                        value={this.state.gender}
+                        onChange={this.handleChange}
                       >
                         <option value="0">Please select</option>
                         <option value="Male">Male</option>

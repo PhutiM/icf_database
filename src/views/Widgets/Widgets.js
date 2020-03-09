@@ -28,6 +28,53 @@ import {
 // Brand Card Chart
 
 class Widgets extends Component {
+  constructor() {
+    super();
+    this.state = {
+      username: "",
+      password: "",
+      email: ""
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.OnButtonPress = this.OnButtonPress.bind(this);
+  }
+
+  handleChange({ target }) {
+    this.setState({
+      [target.name]: target.value
+    });
+  }
+
+  OnButtonPress() {
+    const { username, email, password } = this.state;
+    fetch("http://localhost:8000/insert_user.php", {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/json" // <-- Specifying the Content-Type
+      }),
+      body: JSON.stringify({
+        username: username,
+        email: email,
+        password: password
+      }) // <-- Post parameters
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState({
+          username: "",
+          email: "",
+          password: "",
+          data: responseJson.data
+        });
+
+        alert("Partner successfully addedd");
+      })
+      .catch(error => {
+        alert(error);
+      });
+  }
+
   render() {
     return (
       <div className="animated fadeIn">
@@ -95,7 +142,12 @@ class Widgets extends Component {
                 </Row>
               </CardBody>
               <CardFooter>
-                <Button type="submit" size="lrg" color="primary">
+                <Button
+                  type="submit"
+                  size="lrg"
+                  color="primary"
+                  onClick={this.OnButtonPress}
+                >
                   <i className="fa fa-dot-circle-o"></i> Submit
                 </Button>
               </CardFooter>
