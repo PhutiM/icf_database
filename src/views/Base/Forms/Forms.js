@@ -132,7 +132,7 @@ class Forms extends Component {
       gender,
       department
     } = this.state;
-    fetch("http://localhost:8000/insert_partner.php", {
+    fetch("https://plushealthmedical.000webhostapp.com/insert_partner.php", {
       method: "POST",
       headers: new Headers({
         "Content-Type": "application/json" // <-- Specifying the Content-Type

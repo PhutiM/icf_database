@@ -51,7 +51,7 @@ class Tables extends Component {
   }
 
   Data() {
-    fetch("http://localhost:8000/partners.php", {
+    fetch("https://plushealthmedical.000webhostapp.com/partners.php ", {
       method: "POST",
       headers: new Headers({
         "Content-Type": "application/json" // <-- Specifying the Content-Type
@@ -139,5 +139,10 @@ class Tables extends Component {
     );
   }
 }
+const styles = {
+  error: {
+    border: "1px solid red"
+  }
+};
 
 export default Tables;
