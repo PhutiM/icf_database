@@ -51,7 +51,7 @@ class Tables extends Component {
   }
 
   Data() {
-    fetch("https://plushealthmedical.000webhostapp.com/partners.php", {
+    fetch("http://localhost:8000/partners.php", {
       method: "POST",
       headers: new Headers({
         "Content-Type": "application/json" // <-- Specifying the Content-Type
